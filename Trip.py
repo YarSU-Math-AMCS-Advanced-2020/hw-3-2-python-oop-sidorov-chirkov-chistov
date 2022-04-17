@@ -1,6 +1,7 @@
-import datetime
+from datetime import datetime
 import enum
 import Driver
+from Location import Traffic
 import Offer
 import AbstractManager
 
@@ -14,11 +15,19 @@ class Status(enum.Enum):
 
 
 class TripInfo:
+    # TODO: add constructor by driver and offer (calculate time while init using Traffic methods)
     def __init__(self, offer: Offer, departure_time: datetime, estimated_trip_time: datetime, driver: Driver):
         self.offer_id = offer.id
+        self.driver_id = driver.id
         self.departure_time = departure_time
         self.estimated_trip_time = estimated_trip_time
-        self.driver_id = id(driver)
+
+    def __init__(self, driver: Driver, offer: Offer):
+        self.offer_id = offer.id
+        self.driver_id = driver.id
+        self.departure_time = datetime.now()
+        self.estimated_trip_time = datetime.now() + Traffic.trip_time(offer.offer_info.departure_point,
+                                                                      offer.offer_info.destination_point)
 
 
 class Trip:
