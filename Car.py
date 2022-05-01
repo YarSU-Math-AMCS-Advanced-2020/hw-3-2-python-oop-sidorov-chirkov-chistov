@@ -19,7 +19,7 @@ class CarType(enum.Enum):
 class Car:
     def __init__(self, model: Model, plate_num: str):
         self.model = model
-        self.car_type = self.__determinate_car_type(model)
+        self.car_type: CarType = self.__determinate_car_type(model)
         self.plate_num = plate_num
 
     @staticmethod

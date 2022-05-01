@@ -16,7 +16,7 @@ class Driver(Client):
     def __init__(self, login: str, password: str, car: Car):
         super().__init__(login, password)
         self.car = car
-        self.status = Status.offline
+        self.status: Status = Status.offline
 
     def handle_offer(self, offer: Offer):
         if random():
