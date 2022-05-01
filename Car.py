@@ -24,12 +24,9 @@ class Car:
 
     @staticmethod
     def __determinate_car_type(model):
-        economy = [Model.lada_2121, Model.renault_logan]
-        comfort = [Model.hyundai_solaris, Model.volkswagen_polo]
-        business = [Model.mercedes_benz_s, Model.audi_a8]
-        if model in economy:
+        if model in [Model.lada_2121, Model.renault_logan]:
             return CarType.economy
-        if model in comfort:
+        if model in [Model.hyundai_solaris, Model.volkswagen_polo]:
             return CarType.comfort
-        if model in business:
+        if model in [Model.mercedes_benz_s, Model.audi_a8]:
             return CarType.business
