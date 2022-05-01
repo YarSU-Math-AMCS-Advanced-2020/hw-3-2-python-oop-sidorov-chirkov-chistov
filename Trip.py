@@ -30,11 +30,11 @@ class TripManager:
     def __init__(self):
         self.trips: list[Trip] = []
 
-    def del_trip_by_id(self, id: int):
+    def del_trip_by_id(self, id: int) -> bool:
         return Manager.del_by_id(self.trips, id)
 
-    def find_trip_by_id(self, id: int):
+    def find_trip_by_id(self, id: int) -> Trip | None:
         return Manager.find_by_id(self.trips, id)
 
-    def add_trip(self, trip: Trip):
+    def add_trip(self, trip: Trip) -> bool:
         return Manager.add_element(self.trips, trip)

@@ -24,13 +24,13 @@ class ClientManager:
     def __init__(self):
         self.clients: list[Client] = []
 
-    def del_client_by_id(self, id: UUID):
+    def del_client_by_id(self, id: UUID) -> bool:
         return Manager.del_by_id(self.clients, id)
 
-    def find_client_by_id(self, id: UUID):
+    def find_client_by_id(self, id: UUID) -> Client | None:
         return Manager.find_by_id(self.clients, id)
 
-    def add_client(self, client: Client):
+    def add_client(self, client: Client) -> bool:
         for cl in self.clients:
             if cl.login == client.login:
                 raise ValueError("Login is already used by another user")
