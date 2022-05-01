@@ -11,4 +11,5 @@ class Client:
         self.password = password
         # TODO: set random location depending on map (depends on map size and dont set a car on impassable place)
         self.location = Location(randint(0, 200), randint(0, 200))
+        self.rating = 0.0
         self.id = uuid4()

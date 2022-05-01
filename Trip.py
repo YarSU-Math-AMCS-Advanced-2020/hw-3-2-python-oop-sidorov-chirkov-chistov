@@ -15,7 +15,6 @@ class Status(enum.Enum):
 
 
 class TripInfo:
-    # TODO: add constructor by driver and offer (calculate time while init using Traffic methods)
     def __init__(self, offer: Offer, departure_time: datetime, estimated_trip_time: datetime, driver: Driver):
         self.offer_id = offer.id
         self.driver_id = driver.id

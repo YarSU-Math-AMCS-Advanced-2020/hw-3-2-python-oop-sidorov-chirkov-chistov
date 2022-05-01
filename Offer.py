@@ -5,7 +5,6 @@ import Location
 import decimal
 import datetime
 import Client
-from Trip import TripManager
 
 
 class OfferInfo:
@@ -27,9 +26,7 @@ class Offer:
 
 
 class OfferManager(AbstractManager.Manager):
-    # TODO: offer manager knows about trip manager - that`s bad
-    def __init__(self, trip_manager: TripManager):
-        self.trip_manager = trip_manager
+    def __init__(self):
         self.offers: list[Offer] = []
         self.observers: list[Driver] = []
 
@@ -44,7 +41,7 @@ class OfferManager(AbstractManager.Manager):
         for o in self.observers:
             if Location.Traffic.distance(o.location, offer.offer_info.departure_point) < max_dist \
                     and o.status == Driver.Status.ready:
-                o.handle_offer(self, self.trip_manager, offer)
+                o.handle_offer(self, offer)
 
     def del_offer_by_id(self, id: int):
         return self.del_by_id(self.offers, id)

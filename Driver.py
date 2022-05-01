@@ -18,8 +18,8 @@ class Driver(Client):
         self.car = car
         self.status = Status.offline
 
-    def handle_offer(self, offer_manager: OfferManager, trip_manager: TripManager, offer: Offer):
+    def handle_offer(self, offer: Offer):
         if random():
             self.status = Status.on_route
-            offer_manager.del_offer_by_id(offer.id)
-            trip_manager.add_trip(Trip(TripInfo(self, offer)))
+            OfferManager().del_offer_by_id(offer.id)
+            TripManager().add_trip(Trip(TripInfo(self, offer)))
