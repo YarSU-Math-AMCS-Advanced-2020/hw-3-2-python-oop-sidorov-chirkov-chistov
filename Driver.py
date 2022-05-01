@@ -3,7 +3,7 @@ from random import random
 import Car
 from Offer import Offer, OfferManager
 from Client import Client
-from Trip import TripManager, Trip, TripInfo
+from Trip import TripManager, Trip
 
 
 class Status(enum.Enum):
@@ -22,4 +22,4 @@ class Driver(Client):
         if random():
             self.status = Status.on_route
             OfferManager().del_offer_by_id(offer.id)
-            TripManager().add_trip(Trip(TripInfo(self, offer)))
+            TripManager().add_trip(Trip(self, offer))

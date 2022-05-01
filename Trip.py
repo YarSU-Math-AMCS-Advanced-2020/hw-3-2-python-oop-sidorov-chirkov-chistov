@@ -3,7 +3,8 @@ import enum
 import Driver
 from Location import Traffic
 import Offer
-import AbstractManager
+from AbstractManager import Manager, singleton
+from uuid import uuid4, UUID
 
 
 class Status(enum.Enum):
@@ -14,36 +15,26 @@ class Status(enum.Enum):
     deleted = 4
 
 
-class TripInfo:
-    def __init__(self, offer: Offer, departure_time: datetime, estimated_trip_time: datetime, driver: Driver):
-        self.offer_id = offer.id
-        self.driver_id = driver.id
-        self.departure_time = departure_time
-        self.estimated_trip_time = estimated_trip_time
-
+class Trip:
     def __init__(self, driver: Driver, offer: Offer):
         self.offer_id = offer.id
         self.driver_id = driver.id
         self.departure_time = datetime.now()
-        self.estimated_trip_time = datetime.now() + Traffic.trip_time(offer.offer_info.departure_point,
-                                                                      offer.offer_info.destination_point)
-
-
-class Trip:
-    def __init__(self, trip_info: TripInfo):
-        self.trip_info = trip_info
+        self.estimated_trip_time = Traffic.trip_time(offer.departure_point, offer.destination_point)
         self.status = Status.started
+        self.id = uuid4()
 
 
-class TripManager(AbstractManager.Manager):
+@singleton
+class TripManager:
     def __init__(self):
         self.trips: list[Trip] = []
 
     def del_trip_by_id(self, id: int):
-        return self.del_by_id(self.trips, id)
+        return Manager.del_by_id(self.trips, id)
 
     def find_trip_by_id(self, id: int):
-        return self.find_by_id(self.trips, id)
+        return Manager.find_by_id(self.trips, id)
 
     def add_trip(self, trip: Trip):
-        return self.add_element(self.trips, trip)
+        return Manager.add_element(self.trips, trip)

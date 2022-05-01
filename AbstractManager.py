@@ -1,3 +1,6 @@
+from uuid import UUID
+
+
 # Decorator for a singleton
 def singleton(cls):
     instances = {}
@@ -13,7 +16,7 @@ def singleton(cls):
 @singleton
 class Manager:
     @staticmethod
-    def del_by_id(lst: list, id: int):
+    def del_by_id(lst: list, id: UUID):
         for i in range(len(lst)):
             if lst[i].id == id:
                 del lst[i]
@@ -21,7 +24,7 @@ class Manager:
         return False
 
     @staticmethod
-    def find_by_id(lst: list, id: int):
+    def find_by_id(lst: list, id: UUID):
         for element in lst:
             if element.id == id:
                 return element
