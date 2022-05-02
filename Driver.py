@@ -17,12 +17,20 @@ class Driver(Client):
         super().__init__(login, password)
         self.car = car
         self.status: Status = Status.offline
+        self.enable_offers: list[Offer] = []
+        OfferManager().add_observer(self)
 
-    def handle_offer(self, offer: Offer):
-        if random() > 0.8:
+    def update(self, offer_list: list[Offer]):
+        self.enable_offers = offer_list
+
+    def handle_offer(self, offer_index: int) -> bool:
+        offer = self.enable_offers[offer_index]
+        if OfferManager().find_offer_by_id(offer.id) is not None:
             self.status = Status.on_route
             OfferManager().del_offer_by_id(offer.id)
             TripManager().add_trip(Trip(self, offer))
+            return True
+        return False
 
     def get_ready(self):
         if self.status != Status.on_route:

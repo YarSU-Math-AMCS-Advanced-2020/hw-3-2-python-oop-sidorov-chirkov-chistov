@@ -38,12 +38,15 @@ class OfferManager:
     def del_observer(self, d: Driver):
         return Manager.del_by_id(self.observers, d.id)
 
-    def notify_observers(self, offer: Offer):
+    def notify_observers(self):
         max_dist = 100
-        for o in self.observers:
-            if Traffic.distance(o.location, offer.departure_point) < max_dist \
-                    and o.status == Driver.Status.ready:
-                o.handle_offer(self, offer)
+        for dr in self.observers:
+            enable_offers: list[Offer] = []
+            for offer in self.offer:
+                if Traffic.distance(dr.location, offer.departure_point) < max_dist \
+                        and dr.status == Driver.Status.ready:
+                    enable_offers.append(offer)
+            dr.update(self, enable_offers)
 
     def del_offer_by_id(self, id: UUID) -> bool:
         return Manager.del_by_id(self.offers, id)
