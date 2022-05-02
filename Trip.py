@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+from Client import ClientManager
 from Report import Report
 import Driver
 from Location import Traffic
@@ -20,6 +21,8 @@ class Trip:
         self.state: ITripState = WaitingState()
         self.arrival_time = None
         self.id = uuid4()
+        self.driver_liked = False
+        self.customer_liked = False
 
     def next_state(self):
         self.state.next_state(self)
@@ -32,6 +35,18 @@ class Trip:
 
     def customer_charge(self, msg: str) -> Report:
         return Report(msg, self, self.customer_id)
+
+    def like_driver(self):
+        if not self.driver_liked:
+            dr = ClientManager().find_client_by_id(self.driver_id)
+            if dr is not None:
+                dr.rating += 0.1
+
+    def like_customer(self):
+        if not self.customer_liked:
+            cu = ClientManager().find_client_by_id(self.customer_id)
+            if cu is not None:
+                cu.rating += 0.1
 
 
 @singleton

@@ -5,7 +5,6 @@ from Location import Location
 
 
 class Client:
-    # TODO: add rating system, rating changes due to trip ends or conflicts
     def __init__(self, login: str, password: str):
         if type(login) != str:
             raise TypeError("Login should be string, got " + str(type(login)))
@@ -15,8 +14,23 @@ class Client:
         self.password = password
         # TODO: set random location depending on map (depends on map size and dont set a car on impassable place)
         self.location = Location(randint(0, 200), randint(0, 200))
-        self.rating: float = 4.0  # from 0.0 to 5.0
+        self.__rating: float = 8.5  # from 0.0 to 10.0
         self.id = uuid4()
+
+    @property
+    def rating(self):
+        return self.__rating
+
+    @rating.setter
+    def rating(self, value: float):
+        self.__rating = value
+        if self.__rating > 10.0:
+            self.__rating = 10.0
+        if self.__rating < 0.0:
+            self.__rating = 0.0
+
+    def __str__(self):
+        return f"{self.login}"
 
 
 @singleton
