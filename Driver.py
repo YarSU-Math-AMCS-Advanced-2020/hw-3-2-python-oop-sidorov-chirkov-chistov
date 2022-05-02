@@ -23,3 +23,11 @@ class Driver(Client):
             self.status = Status.on_route
             OfferManager().del_offer_by_id(offer.id)
             TripManager().add_trip(Trip(self, offer))
+
+    def get_ready(self):
+        if self.status != Status.on_route:
+            self.status = Status.ready
+
+    def go_sleep(self):
+        if self.status != Status.on_route:
+            self.status = Status.offline

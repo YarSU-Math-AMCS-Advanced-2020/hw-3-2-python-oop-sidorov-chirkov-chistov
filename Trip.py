@@ -87,6 +87,9 @@ class RidingState(ITripState):
 class PaymentState(ITripState):
     def next_state(self, trip: Trip):
         # here we have to get payment(call payment func)
+        dr = ClientManager().find_client_by_id(trip.driver_id)
+        if dr is not None:
+            dr.status = Driver.Status.ready
         trip.state = FinishedState()
 
 
