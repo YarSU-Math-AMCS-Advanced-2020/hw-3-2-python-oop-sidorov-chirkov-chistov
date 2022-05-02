@@ -78,7 +78,7 @@ class OfferBuilder(ABC):
     def add_destination_point(self, destination: Location):
         self.offer.departure_point = destination
 
-    def add_car_type(self, car_info = CarType.economy):
+    def add_car_type(self, car_info=CarType.economy):
         if car_info is Car:
             self.offer.car_type = car_info.car_type
         elif car_info is CarType:
@@ -102,7 +102,8 @@ class DefaultOfferBuilder(OfferBuilder, ABC):
         self.const_price = const_price
 
     def add_price(self):
-        self.offer.price = self.const_price * len(Traffic.find_way(self.offer.departure_point, self.offer.destination_point))
+        self.offer.price = self.const_price * len(
+            Traffic.find_way(self.offer.departure_point, self.offer.destination_point))
 
 
 # Цена с учетом трафика в текущий момент времени
@@ -127,14 +128,16 @@ class TimeSensitiveOfferBuilder(OfferBuilder, ABC):
         self.cost_per_minute = cost_per_minute
 
     def add_price(self):
-        price = Traffic().trip_time(self.offer.departure_point, self.offer.destination_point).minute * self.cost_per_minute
+        price = Traffic().trip_time(self.offer.departure_point,
+                                    self.offer.destination_point).minute * self.cost_per_minute
         self.offer.price = price
 
 
 @singleton
 class OfferDirector:
     @staticmethod
-    def make_offer_with_car(self, client: Client, car: Car, destination: Location, builder: OfferBuilder = DefaultOfferBuilder()) -> Offer | None:
+    def make_offer_with_car(self, client: Client, car: Car, destination: Location,
+                            builder: OfferBuilder = DefaultOfferBuilder()) -> Offer | None:
         builder.add_client(client)
         builder.add_offer_time()
         builder.add_departure_point()
@@ -144,7 +147,8 @@ class OfferDirector:
         return builder.offer
 
     @staticmethod
-    def make_offer_without_car(self, client: Client, destination: Location, builder: OfferBuilder = DefaultOfferBuilder()) -> Offer | None:
+    def make_offer_without_car(self, client: Client, destination: Location,
+                               builder: OfferBuilder = DefaultOfferBuilder()) -> Offer | None:
         builder.add_client(client)
         builder.add_offer_time()
         builder.add_departure_point()

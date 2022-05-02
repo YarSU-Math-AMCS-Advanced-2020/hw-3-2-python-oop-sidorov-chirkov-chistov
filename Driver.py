@@ -19,7 +19,7 @@ class Driver(Client):
         self.status: Status = Status.offline
 
     def handle_offer(self, offer: Offer):
-        if random():
+        if random() > 0.8:
             self.status = Status.on_route
             OfferManager().del_offer_by_id(offer.id)
             TripManager().add_trip(Trip(self, offer))
