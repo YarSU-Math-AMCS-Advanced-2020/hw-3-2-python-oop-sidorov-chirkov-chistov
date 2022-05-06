@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+import Payment
 from Client import ClientManager
 from Report import Report
 import Driver
@@ -86,7 +87,9 @@ class RidingState(ITripState):
 
 class PaymentState(ITripState):
     def next_state(self, trip: Trip):
-        # here we have to get payment(call payment func)
+        # here payment is handling
+        cu = ClientManager().find_client_by_id(trip.customer_id)
+        print(Payment.payment_process(cu, trip.price))
         dr = ClientManager().find_client_by_id(trip.driver_id)
         if dr is not None:
             dr.status = Driver.Status.ready
