@@ -2,7 +2,7 @@ from decimal import Decimal
 from random import randint
 from uuid import uuid4, UUID
 from AbstractManager import Manager, singleton
-from Location import Location
+from Map import Location
 
 
 class Client:

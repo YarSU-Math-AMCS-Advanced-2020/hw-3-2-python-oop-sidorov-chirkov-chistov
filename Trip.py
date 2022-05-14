@@ -4,7 +4,7 @@ import Payment
 from Client import ClientManager
 from Report import Report
 import Driver
-from Location import Traffic
+from Map import Map
 import Offer
 from AbstractManager import Manager, singleton
 from uuid import uuid4, UUID
@@ -17,7 +17,7 @@ class Trip:
         self.driver_id = driver.id
         self.customer_id = offer.client_id
         self.departure_time = datetime.now()
-        self.estimated_trip_time = Traffic.trip_time(offer.departure_point, offer.destination_point)
+        self.estimated_trip_time = Map.trip_time(offer.departure_point, offer.destination_point)
         self.price: Decimal = offer.price
         self.state: ITripState = WaitingState()
         self.arrival_time = None

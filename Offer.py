@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from uuid import uuid4, UUID
 from AbstractManager import Manager, singleton
 import Driver
-from Location import Location, Traffic
+from Map import Location, Map
 from decimal import Decimal
 from datetime import datetime
 import Client
@@ -43,7 +43,7 @@ class OfferManager:
         for dr in self.observers:
             enable_offers: list[Offer] = []
             for offer in self.offer:
-                if Traffic.distance(dr.location, offer.departure_point) < max_dist \
+                if Map.distance(dr.location, offer.departure_point) < max_dist \
                         and dr.status == Driver.Status.ready:
                     enable_offers.append(offer)
             dr.update(self, enable_offers)
@@ -105,8 +105,7 @@ class DefaultOfferBuilder(OfferBuilder, ABC):
         self.const_price = const_price
 
     def add_price(self):
-        self.offer.price = self.const_price * len(
-            Traffic.find_way(self.offer.departure_point, self.offer.destination_point))
+        self.offer.price = self.const_price * Map.distance(self.offer.departure_point, self.offer.destination_point)
 
 
 # Цена с учетом трафика в текущий момент времени
@@ -117,10 +116,10 @@ class TrafficSensitiveOfferBuilder(OfferBuilder, ABC):
 
     def add_price(self):
         price = Decimal(0)
-        way = Traffic.find_way(self.offer.departure_point, self.offer.destination_point)
+        way = Map.find_way(self.offer.departure_point, self.offer.destination_point)
         for cell in way:
             # TODO: Я бы хотел, чтобы Traffic был singleton, и не получал аргументов на вход - хочется хранить карту тоже отдельно
-            price += Traffic().city_map[cell.y][cell.x] * self.traffic_coefficient
+            price += Map[cell.y][cell.x] * self.traffic_coefficient
         self.offer.price = price
 
 
@@ -131,8 +130,8 @@ class TimeSensitiveOfferBuilder(OfferBuilder, ABC):
         self.cost_per_minute = cost_per_minute
 
     def add_price(self):
-        price = Traffic().trip_time(self.offer.departure_point,
-                                    self.offer.destination_point).minute * self.cost_per_minute
+        price = Map.trip_time(self.offer.departure_point,
+                                self.offer.destination_point).minute * self.cost_per_minute
         self.offer.price = price
 
 
