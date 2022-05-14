@@ -16,7 +16,7 @@ class Map:
         self.city_map = []
         if not os.path.exists('map.txt'):
             raise OSError("Fatal error: map-file doesnt exists")
-        with open('city.txt', 'r') as file:
+        with open('map.txt', 'r') as file:
             lst = file.readlines()
         self.city_map = [[int(n) for n in x.split()] for x in lst]
         self.update_traffic()

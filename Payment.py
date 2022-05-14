@@ -1,25 +1,25 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from decimal import Decimal
-from Client import Client
+
+from Customer import Customer
 
 
 # TODO: we can construct different chains of payment
-def payment_process(client: Client, price: Decimal) -> str:
-    gp = GooglePayHandler(client)
-    ap = ApplePayHandler(client)
-    bc = BankCardPayHandler(client)
-    cp = CashPayHandler(client)
-    gp.set_next(ap).set_next(bc).set_next(cp)
-    return gp.handle(price)
+def payment_process(customer: Customer, price: Decimal) -> str:
+    payment_handler = GooglePayHandler(customer)
+    payment_handler.set_next(ApplePayHandler(customer))
+    payment_handler.set_next(BankCardPayHandler(customer))
+    payment_handler.set_next(CashPayHandler(customer))
+    return payment_handler.handle(price)
 
 
 class PaymentHandler(ABC):
     _next_handler: PaymentHandler = None
 
     @abstractmethod
-    def __init__(self, client: Client):
-        self.client = client
+    def __init__(self, customer: Customer):
+        self.customer = customer
 
     def set_next(self, handler: PaymentHandler) -> PaymentHandler:
         self._next_handler = handler
@@ -34,44 +34,44 @@ class PaymentHandler(ABC):
 
 
 class GooglePayHandler(PaymentHandler):
-    def __init__(self, client: Client):
-        super().__init__(client)
+    def __init__(self, customer: Customer):
+        super().__init__(customer)
 
     def handle(self, price: Decimal) -> str:
-        if self.client.google_pay_balance >= price:
-            self.client.google_pay_balance -= price
-            return "Payment by GooglePay went through"
+        if self.customer.google_pay_balance >= price:
+            self.customer.google_pay_balance -= price
+            return 'Payment by GooglePay went through'
         else:
             return super().handle(price)
 
 
 class ApplePayHandler(PaymentHandler):
-    def __init__(self, client: Client):
-        super().__init__(client)
+    def __init__(self, customer: Customer):
+        super().__init__(customer)
 
     def handle(self, price: Decimal) -> str:
-        if self.client.apple_pay_balance >= price:
-            self.client.apple_pay_balance -= price
-            return "Payment by ApplePay went through"
+        if self.customer.apple_pay_balance >= price:
+            self.customer.apple_pay_balance -= price
+            return 'Payment by ApplePay went through'
         else:
             return super().handle(price)
 
 
 class BankCardPayHandler(PaymentHandler):
-    def __init__(self, client: Client):
-        super().__init__(client)
+    def __init__(self, customer: Customer):
+        super().__init__(customer)
 
     def handle(self, price: Decimal) -> str:
-        if self.client.google_pay_balance >= price:
-            self.client.bank_card_balance -= price
-            return "Payment by card went through"
+        if self.customer.google_pay_balance >= price:
+            self.customer.bank_card_balance -= price
+            return 'Payment by card went through'
         else:
             return super().handle(price)
 
 
 class CashPayHandler(PaymentHandler):
-    def __init__(self, client: Client):
-        super().__init__(client)
+    def __init__(self, customer: Customer):
+        super().__init__(customer)
 
     def handle(self, price: Decimal) -> str:
-        return "Client have to pay by cash"
+        return 'Client have to pay by cash'

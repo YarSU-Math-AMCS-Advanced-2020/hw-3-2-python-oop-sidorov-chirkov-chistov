@@ -2,18 +2,18 @@ import enum
 
 
 class Model(enum.Enum):
-    lada_2121 = 0
-    renault_logan = 1
-    hyundai_solaris = 2
-    volkswagen_polo = 3
-    mercedes_benz_s = 4
-    audi_a8 = 5
+    LADA_2121 = 0
+    RENAULT_LOGAN = 1
+    HYUNDAI_SOLARIS = 2
+    VOLKSWAGEN_POLO = 3
+    MERCEDES_BENZ_S = 4
+    AUDI_A8 = 5
 
 
 class CarType(enum.Enum):
-    economy = 0
-    comfort = 1
-    business = 2
+    ECONOMY = 0
+    COMFORT = 1
+    BUSINESS = 2
 
 
 class Car:
@@ -24,9 +24,9 @@ class Car:
 
     @staticmethod
     def __determinate_car_type(model):
-        if model in [Model.lada_2121, Model.renault_logan]:
-            return CarType.economy
-        if model in [Model.hyundai_solaris, Model.volkswagen_polo]:
-            return CarType.comfort
-        if model in [Model.mercedes_benz_s, Model.audi_a8]:
-            return CarType.business
+        if model in [Model.LADA_2121, Model.RENAULT_LOGAN]:
+            return CarType.ECONOMY
+        if model in [Model.HYUNDAI_SOLARIS, Model.VOLKSWAGEN_POLO]:
+            return CarType.COMFORT
+        if model in [Model.MERCEDES_BENZ_S, Model.AUDI_A8]:
+            return CarType.BUSINESS

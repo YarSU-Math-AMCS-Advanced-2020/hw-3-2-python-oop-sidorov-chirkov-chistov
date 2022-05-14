@@ -1,6 +1,6 @@
-from decimal import Decimal
 from random import randint
 from uuid import uuid4, UUID
+
 from AbstractManager import Manager, singleton
 from Map import Location
 
@@ -12,14 +12,11 @@ class Client:
         if not login[0].isalpha() or not login.isalnum():
             raise ValueError("Login should consist of letters and digits, first symbol is letter")
         self.login = login
-        self.password = password
+        self.__password = password
         # TODO: set random location depending on map (depends on map size and dont set a car on impassable place)
         self.location = Location(randint(0, 200), randint(0, 200))
         self.__rating: float = 8.5  # from 0.0 to 10.0
         self.id = uuid4()
-        self.google_pay_balance: Decimal = Decimal(0.0)
-        self.apple_pay_balance: Decimal = Decimal(0.0)
-        self.bank_card_balance: Decimal = Decimal(0.0)
 
     @property
     def rating(self):

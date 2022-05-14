@@ -1,14 +1,15 @@
 import enum
 from datetime import datetime
 from uuid import UUID
+
 from Client import ClientManager
 from Trip import Trip
 
 
 class ReportStatus(enum.Enum):
-    pending = 0
-    declined = 1
-    approved = 2
+    PENDING = 0
+    DECLINED = 1
+    APPROVED = 2
 
 
 class Report:
@@ -17,7 +18,7 @@ class Report:
         self.trip = trip
         self.client_id = client_id
         self.time_stamp = datetime.now()
-        self.status = ReportStatus.pending
+        self.status = ReportStatus.PENDING
 
     def __str__(self):
         return f"Time: {self.time_stamp}\nMessage: {self.msg}"
@@ -26,7 +27,7 @@ class Report:
         cl = ClientManager().find_client_by_id(self.client_id)
         if cl is not None:
             cl.rating -= 1.0
-        self.status = ReportStatus.approved
+        self.status = ReportStatus.APPROVED
 
     def decline(self):
-        self.status = ReportStatus.declined
+        self.status = ReportStatus.DECLINED
