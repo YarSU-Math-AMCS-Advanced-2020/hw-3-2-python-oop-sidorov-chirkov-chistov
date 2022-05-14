@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 
 from payment import payment_process
 from client import ClientManager
-from report import Report
+from report import Report, ReportManager
 from driver import Driver, Status
 from map import Map
 from offer import Offer
@@ -85,11 +85,11 @@ class WaitingState(ITripState):
         trip.price += Decimal(self.wait_price * passed_time)
         trip.state = RidingState()
 
+    # TODO: problem with expected type(client/customer)
     def final_state(self, trip: Trip):
         customer = ClientManager().find_client_by_id(trip.customer_id)
         if payment_process(customer, self.wait_price) == 'Client have to pay by cash':
-            trip.customer_report('No payment')
-            # TODO: we have to store reports
+            ReportManager().add_report(trip.customer_report('No payment'))
         trip.state = FinishedState()
 
 

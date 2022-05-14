@@ -13,6 +13,7 @@ def singleton(cls):
     return getinstance
 
 
+# TODO: очень много копипаста, надо менять способ хранения всего этого
 @singleton
 class Manager:
     @staticmethod
