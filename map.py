@@ -1,7 +1,8 @@
 import datetime
-import os
-import random
-from AbstractManager import singleton
+from os import path
+from random import randint
+
+from manager import singleton
 
 
 class Location:
@@ -14,7 +15,7 @@ class Location:
 class Map:
     def __init__(self):  # map: 0 - passable, -1 - impassable
         self.city_map = []
-        if not os.path.exists('map.txt'):
+        if not path.exists('map.txt'):
             raise OSError("Fatal error: map-file doesnt exists")
         with open('map.txt', 'r') as file:
             lst = file.readlines()
@@ -28,17 +29,17 @@ class Map:
         for i in range(len(self.city_map)):
             for j in range(len(self.city_map[i])):
                 if self.city_map[i][j] != -1:
-                    self.city_map[i][j] = random.randint(0, 10)
+                    self.city_map[i][j] = randint(0, 10)
 
     def find_way(self, a: Location, b: Location) -> list[Location]:
         pass
-        # Dijkstra algorithm implementation
+        # TODO: Dijkstra algorithm implementation
 
     def distance(self, a: Location, b: Location) -> int:
         return len(self.find_way(a, b))
 
     def trip_time(self, a: Location, b: Location) -> datetime.time:
-        time = datetime.time(minute=0)
+        time = datetime.time(second=0)
         way = self.find_way(a, b)
         for cell in way:
             time += datetime.timedelta(seconds=33) * int(self.city_map[cell.x][cell.y])

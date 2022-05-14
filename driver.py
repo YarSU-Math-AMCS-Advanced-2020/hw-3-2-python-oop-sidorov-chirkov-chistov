@@ -1,9 +1,9 @@
 import enum
 
-import Car
-from Offer import Offer, OfferManager
-from Client import Client
-from Trip import TripManager, Trip
+from car import Car
+from offer import Offer, OfferManager
+from client import Client
+from trip import TripManager, Trip
 
 
 class Status(enum.Enum):

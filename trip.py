@@ -3,20 +3,20 @@ from decimal import Decimal
 from uuid import uuid4, UUID
 from abc import ABC, abstractmethod
 
-import Payment
-from Client import ClientManager
-from Report import Report
-import Driver
-from Map import Map
-import Offer
-from AbstractManager import Manager, singleton
+from payment import payment_process
+from client import ClientManager
+from report import Report
+from driver import Driver, Status
+from map import Map
+from offer import Offer
+from manager import Manager, singleton
 
 
 class Trip:
     def __init__(self, driver: Driver, offer: Offer):
         self.offer_id = offer.id
         self.driver_id = driver.id
-        self.customer_id = offer.client_id
+        self.customer_id = offer.customer_id
         self.departure_time = datetime.now()
         self.estimated_trip_time = Map().trip_time(offer.departure_point, offer.destination_point)
         self.price: Decimal = offer.price
@@ -87,7 +87,7 @@ class WaitingState(ITripState):
 
     def final_state(self, trip: Trip):
         customer = ClientManager().find_client_by_id(trip.customer_id)
-        if Payment.payment_process(customer, self.wait_price) == 'Client have to pay by cash':
+        if payment_process(customer, self.wait_price) == 'Client have to pay by cash':
             trip.customer_report('No payment')
             # TODO: we have to store reports
         trip.state = FinishedState()
@@ -100,17 +100,17 @@ class RidingState(ITripState):
 
     def final_state(self, trip: Trip):
         customer = ClientManager().find_client_by_id(trip.customer_id)
-        Payment.payment_process(customer, trip.price)
+        payment_process(customer, trip.price)
         trip.state = FinishedState()
 
 
 class PaymentState(ITripState):
     def next_state(self, trip: Trip):
         customer = ClientManager().find_client_by_id(trip.customer_id)
-        print(Payment.payment_process(customer, trip.price))
+        print(payment_process(customer, trip.price))
         driver = ClientManager().find_client_by_id(trip.driver_id)
         if driver is not None:
-            driver.status = Driver.Status.READY
+            driver.status = Status.READY
         trip.state = FinishedState()
 
     def final_state(self, trip: Trip):

@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from Client import Client
+from client import Client
 
 
 class Customer(Client):

@@ -1,8 +1,8 @@
 from random import randint
 from uuid import uuid4, UUID
 
-from AbstractManager import Manager, singleton
-from Map import Location
+from manager import Manager, singleton
+from map import Location
 
 
 class Client:
@@ -46,7 +46,7 @@ class ClientManager:
         return Manager.find_by_id(self.clients, id)
 
     def add_client(self, client: Client) -> bool:
-        for cl in self.clients:
-            if cl.login == client.login:
+        for client in self.clients:
+            if client.login == client.login:
                 raise ValueError("Login is already used by another user")
         return Manager.add_element(self.clients, client)

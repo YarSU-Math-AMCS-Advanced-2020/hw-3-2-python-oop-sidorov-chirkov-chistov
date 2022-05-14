@@ -2,7 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from decimal import Decimal
 
-from Customer import Customer
+from customer import Customer
 
 
 # TODO: we can construct different chains of payment

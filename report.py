@@ -2,8 +2,8 @@ import enum
 from datetime import datetime
 from uuid import UUID
 
-from Client import ClientManager
-from Trip import Trip
+from client import ClientManager
+from trip import Trip
 
 
 class ReportStatus(enum.Enum):

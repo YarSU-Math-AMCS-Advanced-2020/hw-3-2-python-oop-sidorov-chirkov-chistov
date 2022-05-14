@@ -3,18 +3,19 @@ from uuid import uuid4, UUID
 from decimal import Decimal
 from datetime import datetime
 
-from AbstractManager import Manager, singleton
-import Driver
-from Map import Location, Map
-from Client import ClientManager, Customer
-from Car import Car, CarType
+from manager import Manager, singleton
+from driver import Driver
+from map import Location, Map
+from client import ClientManager
+from customer import Customer
+from car import Car, CarType
 
 
 # TODO: dataclass?
 class Offer:
-    def __init__(self, client: Customer, offer_time: datetime, departure_point: Location,
+    def __init__(self, customer: Customer, offer_time: datetime, departure_point: Location,
                  destination_point: Location, car_type, price: Decimal):
-        self.client_id = client.id
+        self.customer_id = customer.id
         self.offer_time = offer_time
         self.departure_point = departure_point
         self.destination_point = destination_point
@@ -32,11 +33,11 @@ class OfferManager:
         self.offers: list[Offer] = []
         self.observers: list[Driver] = []
 
-    def add_observer(self, d: Driver):
-        return Manager.add_element(self.observers, d)
+    def add_observer(self, driver: Driver):
+        return Manager.add_element(self.observers, driver)
 
-    def del_observer(self, d: Driver):
-        return Manager.del_by_id(self.observers, d.id)
+    def del_observer(self, driver: Driver):
+        return Manager.del_by_id(self.observers, driver.id)
 
     def notify_observers(self):
         max_dist = 100
@@ -44,9 +45,9 @@ class OfferManager:
             enable_offers: list[Offer] = []
             for offer in self.offer:
                 if Map().distance(driver.location, offer.departure_point) < max_dist \
-                        and driver.status == Driver.Status.READY:
+                        and driver.status == driver.status.READY:
                     enable_offers.append(offer)
-            driver.update(self, enable_offers)
+            driver.update(enable_offers)
 
     def del_offer_by_id(self, id: UUID) -> bool:
         return Manager.del_by_id(self.offers, id)
@@ -65,18 +66,18 @@ class OfferBuilder(ABC):
     def reset(self):
         self.offer = Offer()
 
-    def add_client(self, client: Customer):
-        self.offer.client_id = client.id
+    def add_customer(self, customer: Customer):
+        self.offer.customer_id = customer.id
 
     def add_offer_time(self):
         self.offer.offer_time = datetime.now()
 
     def add_departure_point(self):
-        client = ClientManager().find_client_by_id(self.offer.client_id)
+        customer = ClientManager().find_client_by_id(self.offer.customer_id)
         # Если был задан невалидный клиент
-        if client is None:
+        if customer is None:
             self.reset()
-        self.offer.departure_point = client.location
+        self.offer.departure_point = customer.location
 
     def add_destination_point(self, destination: Location):
         self.offer.departure_point = destination
@@ -137,9 +138,9 @@ class TimeSensitiveOfferBuilder(OfferBuilder, ABC):
 @singleton
 class OfferDirector:
     @staticmethod
-    def make_offer_with_car(client: Customer, car: Car, destination: Location,
+    def make_offer_with_car(customer: Customer, car: Car, destination: Location,
                             builder: OfferBuilder = DefaultOfferBuilder()) -> Offer | None:
-        builder.add_client(client)
+        builder.add_customer(customer)
         builder.add_offer_time()
         builder.add_departure_point()
         builder.add_destination_point(destination)
@@ -148,9 +149,9 @@ class OfferDirector:
         return builder.offer
 
     @staticmethod
-    def make_offer_without_car(client: Customer, destination: Location,
+    def make_offer_without_car(customer: Customer, destination: Location,
                                builder: OfferBuilder = DefaultOfferBuilder()) -> Offer | None:
-        builder.add_client(client)
+        builder.add_customer(customer)
         builder.add_offer_time()
         builder.add_departure_point()
         builder.add_destination_point(destination)
