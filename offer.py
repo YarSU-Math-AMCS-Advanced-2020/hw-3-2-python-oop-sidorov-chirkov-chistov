@@ -9,9 +9,10 @@ from map import Location, Map
 from client import ClientManager
 from customer import Customer
 from car import Car, CarType
+from dataclasses import dataclass
 
 
-# TODO: dataclass?
+@dataclass
 class Offer:
     def __init__(self, customer: Customer, offer_time: datetime, departure_point: Location,
                  destination_point: Location, car_type, price: Decimal):
@@ -76,25 +77,25 @@ class OfferBuilder(ABC):
         customer = ClientManager().find_client_by_id(self.offer.customer_id)
         # Если был задан невалидный клиент
         if customer is None:
-            self.reset()
+            raise ValueError('Customer should be valid!')
         self.offer.departure_point = customer.location
 
     def add_destination_point(self, destination: Location):
         self.offer.departure_point = destination
 
-    def add_car_type(self, car_info=CarType.ECONOMY):
+    def add_car_type(self, car_info: Car | CarType = CarType.ECONOMY):
         if car_info is Car:
             self.offer.car_type = car_info.car_type
         elif car_info is CarType:
             self.offer.car_type = car_info
         else:
-            self.reset()
+            raise TypeError('CarInfo should be of type Car or CarInfo!')
 
     @abstractmethod
     def add_price(self):
         pass
 
-    def return_offer(self) -> Offer | None:
+    def create_offer(self) -> Offer | None:
         # Если цена не None, то объект был полностью создан
         return self.offer if (self.offer.price is not None) else None
 
@@ -146,7 +147,7 @@ class OfferDirector:
         builder.add_destination_point(destination)
         builder.add_car_type(car.car_type)
         builder.add_price()
-        return builder.offer
+        return builder.create_offer()
 
     @staticmethod
     def make_offer_without_car(customer: Customer, destination: Location,
@@ -157,4 +158,4 @@ class OfferDirector:
         builder.add_destination_point(destination)
         builder.add_car_type()
         builder.add_price()
-        return builder.offer
+        return builder.create_offer()

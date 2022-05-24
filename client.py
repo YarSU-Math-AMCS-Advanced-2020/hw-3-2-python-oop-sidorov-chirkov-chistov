@@ -1,3 +1,4 @@
+import random
 from random import randint
 from uuid import uuid4, UUID
 
@@ -11,12 +12,14 @@ class Client:
             raise TypeError("Login should be string, got " + str(type(login)))
         if not login[0].isalpha() or not login.isalnum():
             raise ValueError("Login should consist of letters and digits, first symbol is letter")
+
         self.login = login
-        self.__password = password
-        # TODO: set random location depending on map (depends on map size and dont set a car on impassable place)
-        self.location = Location(randint(0, 200), randint(0, 200))
-        self.__rating: float = 8.5  # from 0.0 to 10.0
+        self.location = Location()
         self.id = uuid4()
+
+        # We don't save passwords!
+        self.__password = hash(password)
+        self.__rating: float = random.random() * 10  # from 0.0 to 10.0
 
     @property
     def rating(self):

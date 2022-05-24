@@ -6,7 +6,7 @@ from manager import singleton
 
 
 class Location:
-    def __init__(self, x: int, y: int):
+    def __init__(self, x: int = randint(Map().min_x, Map().max_x), y: int = randint(Map().min_y, Map().max_y)):
         self.x = x
         self.y = y
 
@@ -21,6 +21,12 @@ class Map:
             lst = file.readlines()
         self.city_map = [[int(n) for n in x.split()] for x in lst]
         self.update_traffic()
+
+        # Limits of map
+        self.min_x = 0
+        self.max_x = len(self.city_map) - 1
+        self.min_y = 0
+        self.max_y = len(self.city_map[0]) - 1
 
     def __getitem__(self, item):
         return self.city_map[item]

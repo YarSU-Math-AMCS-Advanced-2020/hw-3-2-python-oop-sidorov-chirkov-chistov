@@ -19,11 +19,11 @@ class CarType(enum.Enum):
 class Car:
     def __init__(self, model: Model, plate_num: str):
         self.model = model
-        self.car_type: CarType = self.__determinate_car_type(model)
+        self.car_type: CarType = self.__determine_car_type(model)
         self.plate_num = plate_num
 
     @staticmethod
-    def __determinate_car_type(model):
+    def __determine_car_type(model):
         if model in [Model.LADA_2121, Model.RENAULT_LOGAN]:
             return CarType.ECONOMY
         if model in [Model.HYUNDAI_SOLARIS, Model.VOLKSWAGEN_POLO]:
