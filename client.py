@@ -3,7 +3,7 @@ from random import randint
 from uuid import uuid4, UUID
 
 from manager import Manager, singleton
-from map import Location
+from map import Location, Map
 
 
 class Client:
@@ -14,7 +14,7 @@ class Client:
             raise ValueError("Login should consist of letters and digits, first symbol is letter")
 
         self.login = login
-        self.location = Location()
+        self.location = Location(randint(Map().min_x, Map().max_x), randint(Map().min_y, Map().max_y))
         self.id = uuid4()
 
         # We don't save passwords!
