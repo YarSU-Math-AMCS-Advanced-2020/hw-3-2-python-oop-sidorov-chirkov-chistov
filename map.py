@@ -1,8 +1,8 @@
-import datetime
 from copy import copy
+from datetime import time, timedelta
+from manager import singleton
 from os import path
 from random import randint
-from manager import singleton
 
 
 class Location:
@@ -48,14 +48,16 @@ class Map:
                 if self.city_map[i][j] != -1:
                     self.city_map[i][j] = randint(0, 10)
 
+    # Dijkstra implementation
     def find_way(self, a: Location, b: Location) -> list[Location]:
         inf = int(10 ** 10)
-        distance = [[inf] * len(self.city_map[0]) for _ in range(len(self.city_map))]
+        distance = [[inf] * len(self.city_map[0]) for _ in
+                    range(len(self.city_map))]
         distance[a.x][a.y] = 0
         parent = {a: Location(-1, -1)}
         s = {(distance[a.x][a.y], a)}
 
-        # Вспомогательная функция
+        # Utility func
         def update_vertex(xx, yy):
             if self.city_map[xx][yy] + dist < distance[xx][yy]:
                 distance[xx][yy] = self.city_map[xx][yy] + dist
@@ -66,14 +68,14 @@ class Map:
             dist, p = s.pop()
             x, y = p.x, p.y
 
-            if x >= 1 and self.city_map[x-1][y] != -1:
-                update_vertex(x-1, y)
-            if y >= 1 and self.city_map[x][y-1] != -1:
-                update_vertex(x, y-1)
-            if x < len(self.city_map) - 1 and self.city_map[x+1][y] != -1:
-                update_vertex(x+1, y)
-            if y < len(self.city_map[0]) - 1 and self.city_map[x][y+1] != -1:
-                update_vertex(x, y+1)
+            if x >= 1 and self.city_map[x - 1][y] != -1:
+                update_vertex(x - 1, y)
+            if y >= 1 and self.city_map[x][y - 1] != -1:
+                update_vertex(x, y - 1)
+            if x < len(self.city_map) - 1 and self.city_map[x + 1][y] != -1:
+                update_vertex(x + 1, y)
+            if y < len(self.city_map[0]) - 1 and self.city_map[x][y + 1] != -1:
+                update_vertex(x, y + 1)
 
         if distance[b.x][b.y] == 0:
             return []
@@ -89,9 +91,9 @@ class Map:
     def distance(self, a: Location, b: Location) -> int:
         return len(self.find_way(a, b))
 
-    def trip_time(self, a: Location, b: Location) -> datetime.time:
-        time = datetime.time(second=0)
+    def trip_time(self, a: Location, b: Location) -> time:
+        trip_time = time(second=0)
         way = self.find_way(a, b)
         for cell in way:
-            time += datetime.timedelta(seconds=33) * int(self.city_map[cell.x][cell.y])
-        return time
+            trip_time += timedelta(seconds=33) * self.city_map[cell.x][cell.y]
+        return trip_time

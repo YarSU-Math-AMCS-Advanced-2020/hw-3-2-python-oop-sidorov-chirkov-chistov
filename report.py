@@ -1,8 +1,8 @@
-import enum
 from datetime import datetime
+import enum
 from uuid import UUID
 
-from client import ClientManager
+from user import UserManager
 from manager import singleton, Manager
 from trip import Trip
 
@@ -14,20 +14,20 @@ class ReportStatus(enum.Enum):
 
 
 class Report:
-    def __init__(self, msg: str, trip: Trip, client_id: UUID):
+    def __init__(self, user_id: UUID, msg: str, trip: Trip):
+        self.user_id = user_id
         self.msg = msg
-        self.trip = trip
-        self.client_id = client_id
         self.time_stamp = datetime.now()
+        self.trip = trip
         self.status = ReportStatus.PENDING
 
     def __str__(self):
         return f"Time: {self.time_stamp}\nMessage: {self.msg}"
 
     def approve(self):
-        client = ClientManager().find_client_by_id(self.client_id)
-        if client is not None:
-            client.rating -= 1.0
+        user = UserManager().find_user_by_id(self.user_id)
+        if user is not None:
+            user.rating -= 1.0
         self.status = ReportStatus.APPROVED
 
     def decline(self):

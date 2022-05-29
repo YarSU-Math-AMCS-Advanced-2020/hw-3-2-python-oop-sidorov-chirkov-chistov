@@ -1,8 +1,8 @@
 import enum
 
 from car import Car
+from user import User
 from offer import Offer, OfferManager
-from client import Client
 from trip import TripManager, Trip
 
 
@@ -12,7 +12,7 @@ class Status(enum.Enum):
     ON_ROUTE = 2
 
 
-class Driver(Client):
+class Driver(User):
     def __init__(self, login: str, password: str, car: Car):
         super().__init__(login, password)
         self.car = car

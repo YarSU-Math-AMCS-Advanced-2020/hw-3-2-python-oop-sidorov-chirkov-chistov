@@ -1,9 +1,9 @@
 from decimal import Decimal
 
-from client import Client
+from user import User
 
 
-class Customer(Client):
+class Passenger(User):
     def __init__(self, login: str, password: str):
         super().__init__(login, password)
         self.google_pay_balance: Decimal = Decimal(0.0)
