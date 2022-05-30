@@ -1,5 +1,6 @@
 import random
 from random import randint
+from typing import List
 from uuid import uuid4, UUID
 
 from driver import Driver
@@ -44,27 +45,25 @@ class User:
 @singleton
 class UserManager:
     def __init__(self):
-        self.users: list[User] = []
+        self.users: List[User] = []
 
-    def del_user_by_id(self, id: UUID) -> bool:
-        return Manager.del_by_id(self.users, id)
+    def del_user_by_id(self, _id: UUID) -> bool:
+        return Manager.del_by_id(self.users, _id)
 
-    def find_user_by_id(self, id: UUID) -> User | None:
-        return Manager.find_by_id(self.users, id)
+    def find_user_by_id(self, _id: UUID) -> User | None:
+        return Manager.find_by_id(self.users, _id)
 
-    def find_driver_by_id(self, id: UUID) -> Driver | None:
-        driver = Manager.find_by_id(self.users, id)
+    def find_driver_by_id(self, _id: UUID) -> Driver | None:
+        driver = Manager.find_by_id(self.users, _id)
         if driver is Driver:
             return driver
-        else:
-            return None
+        return None
 
-    def find_passenger_by_id(self, id: UUID) -> Passenger | None:
-        passenger = Manager.find_by_id(self.users, id)
+    def find_passenger_by_id(self, _id: UUID) -> Passenger | None:
+        passenger = Manager.find_by_id(self.users, _id)
         if passenger is Passenger:
             return passenger
-        else:
-            return None
+        return None
 
     def add_user(self, user: User) -> bool:
         for user in self.users:

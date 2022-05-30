@@ -1,3 +1,4 @@
+from typing import List, Any
 from uuid import UUID
 
 
@@ -16,22 +17,22 @@ def singleton(cls):
 @singleton
 class Manager:
     @staticmethod
-    def del_by_id(lst: list, id: UUID):
-        for i in range(len(lst)):
-            if lst[i].id == id:
-                del lst[i]
+    def del_by_id(lst: List, _id: UUID):
+        for index in range(len(lst)):
+            if lst[index].id == _id:
+                del lst[index]
                 return True
         return False
 
     @staticmethod
-    def find_by_id(lst: list, id: UUID):
+    def find_by_id(lst: List, _id: UUID):
         for element in lst:
-            if element.id == id:
+            if element.id == _id:
                 return element
         return None
 
     @staticmethod
-    def add_element(lst: list, element):
+    def add_element(lst: List, element: Any):
         if element not in lst:
             lst.append(element)
             return True

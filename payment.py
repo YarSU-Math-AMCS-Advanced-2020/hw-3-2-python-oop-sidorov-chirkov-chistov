@@ -13,12 +13,12 @@ class PaymentHandlerType(Enum):
     CashPayHandler = 4
 
 
-# create handler with selected type first
-# cash payment is default
+# Create handler with selected type first
+# Cash payment is default
 def create_handler(passenger: Passenger,
                    payment_handler_type: PaymentHandlerType) -> PaymentHandler:
     if payment_handler_type == CashPayHandler:
-        handler = CashPayHandler(passenger)
+        handler: PaymentHandler = CashPayHandler(passenger)
         return handler
 
     handler = GooglePayHandler(passenger)

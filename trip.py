@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from decimal import Decimal
+from typing import List
 from uuid import uuid4, UUID
 
 from user import UserManager
@@ -55,13 +56,13 @@ class Trip:
 @singleton
 class TripManager:
     def __init__(self):
-        self.trips: list[Trip] = []
+        self.trips: List[Trip] = []
 
-    def del_trip_by_id(self, id: UUID) -> bool:
-        return Manager.del_by_id(self.trips, id)
+    def del_trip_by_id(self, _id: UUID) -> bool:
+        return Manager.del_by_id(self.trips, _id)
 
-    def find_trip_by_id(self, id: UUID) -> Trip | None:
-        return Manager.find_by_id(self.trips, id)
+    def find_trip_by_id(self, _id: UUID) -> Trip | None:
+        return Manager.find_by_id(self.trips, _id)
 
     def add_trip(self, trip: Trip) -> bool:
         return Manager.add_element(self.trips, trip)
@@ -82,8 +83,7 @@ class WaitingState(ITripState):
         self.wait_price = Decimal(10.5)
 
     def next_state(self, trip: Trip):
-        passed_time = int(
-            (datetime.now() - trip.departure_time).total_seconds() / 60)
+        passed_time = int((datetime.now() - trip.departure_time).total_seconds() / 60)
         trip.price += Decimal(self.wait_price * passed_time)
         trip.state = RidingState()
 

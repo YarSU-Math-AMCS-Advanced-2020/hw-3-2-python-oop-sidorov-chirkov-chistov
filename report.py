@@ -1,5 +1,6 @@
 from datetime import datetime
 import enum
+from typing import List
 from uuid import UUID
 
 from user import UserManager
@@ -14,15 +15,15 @@ class ReportStatus(enum.Enum):
 
 
 class Report:
-    def __init__(self, user_id: UUID, msg: str, trip: Trip):
+    def __init__(self, user_id: UUID, message: str, trip: Trip):
         self.user_id = user_id
-        self.msg = msg
+        self.message = message
         self.time_stamp = datetime.now()
         self.trip = trip
         self.status = ReportStatus.PENDING
 
     def __str__(self):
-        return f"Time: {self.time_stamp}\nMessage: {self.msg}"
+        return f"Time: {self.time_stamp}\nMessage: {self.message}"
 
     def approve(self):
         user = UserManager().find_user_by_id(self.user_id)
@@ -37,13 +38,13 @@ class Report:
 @singleton
 class ReportManager:
     def __init__(self):
-        self.reports: list[Report] = []
+        self.reports: List[Report] = []
 
-    def del_report_by_id(self, id: UUID) -> bool:
-        return Manager.del_by_id(self.reports, id)
+    def del_report_by_id(self, _id: UUID) -> bool:
+        return Manager.del_by_id(self.reports, _id)
 
-    def find_report_by_id(self, id: UUID) -> Report | None:
-        return Manager.find_by_id(self.reports, id)
+    def find_report_by_id(self, _id: UUID) -> Report | None:
+        return Manager.find_by_id(self.reports, _id)
 
     def add_report(self, report: Report) -> bool:
         return Manager.add_element(self.reports, report)

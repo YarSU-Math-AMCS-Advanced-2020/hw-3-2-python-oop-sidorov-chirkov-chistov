@@ -1,4 +1,5 @@
 import enum
+from typing import List
 
 from car import Car
 from user import User
@@ -17,10 +18,10 @@ class Driver(User):
         super().__init__(login, password)
         self.car = car
         self.status: Status = Status.OFFLINE
-        self.__enable_offers: list[Offer] = []
+        self.__enable_offers: List[Offer] = []
         OfferManager().add_observer(self)
 
-    def update(self, offer_list: list[Offer]):
+    def update(self, offer_list: List[Offer]):
         self.__enable_offers = offer_list
 
     def handle_offer(self, offer_index: int) -> bool:
