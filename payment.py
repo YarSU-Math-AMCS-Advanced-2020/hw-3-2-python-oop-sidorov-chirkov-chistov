@@ -40,7 +40,7 @@ def create_handler(passenger: Passenger,
 
 
 class PaymentHandler(ABC):
-    _next_handler: PaymentHandler = None
+    _next_handler: PaymentHandler | None = None
 
     @abstractmethod
     def __init__(self, passenger: Passenger):
