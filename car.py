@@ -1,4 +1,5 @@
 import enum
+from dataclasses import dataclass
 
 
 class Model(enum.Enum):
@@ -16,11 +17,13 @@ class CarType(enum.Enum):
     BUSINESS = 2
 
 
+@dataclass
 class Car:
-    def __init__(self, model: Model, plate_num: str):
-        self.model = model
-        self.car_type: CarType = self.__determine_car_type(model)
-        self.plate_num = plate_num
+    model: Model
+    plate_num: str
+
+    def __post_init__(self):
+        self.car_type: CarType = self.__determine_car_type(self.model)
 
     @staticmethod
     def __determine_car_type(model):

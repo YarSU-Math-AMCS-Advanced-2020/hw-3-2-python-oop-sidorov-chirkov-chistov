@@ -11,11 +11,14 @@ from passenger import Passenger
 
 class User:
     def __init__(self, login: str, password: str):
-        if type(login) != str:
-            raise TypeError("Login should be string, got " + str(type(login)))
-        if not login[0].isalpha() or not login.isalnum():
-            raise ValueError("Login should consist of letters and digits,"
-                             "first symbol is letter")
+
+        # user with login admin and password 'password' is an empty user
+        if login != 'admin' and password != 'password':
+            if type(login) != str:
+                raise TypeError("Login should be string, got " + str(type(login)))
+            if not login[0].isalpha() or not login.isalnum():
+                raise ValueError("Login should consist of letters and digits,"
+                                 "first symbol is letter")
 
         self.login = login
         self.location = Location(randint(Map().min_x, Map().max_x),
@@ -67,6 +70,6 @@ class UserManager:
 
     def add_user(self, user: User) -> bool:
         for user in self.users:
-            if user.login == user.login:
+            if user.login == user.login and user.login != 'admin':
                 raise ValueError("Login is already used by another user")
         return Manager.add_element(self.users, user)

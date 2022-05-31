@@ -5,7 +5,7 @@ from typing import List
 from uuid import uuid4, UUID
 
 from car import Car, CarType
-from payment import PaymentHandler, PaymentHandlerType, create_handler
+from payment import PaymentHandler, PaymentHandlerType, create_handler, CashPayHandler
 from user import UserManager
 from passenger import Passenger
 from dataclasses import dataclass
@@ -16,25 +16,17 @@ from map import Location, Map
 
 @dataclass
 class Offer:
-    def __init__(self, car_type: CarType,
-                 departure_point: Location,
-                 destination_point: Location,
-                 offer_time: datetime,
-                 passenger: Passenger,
-                 payment_handler: PaymentHandler,
-                 price: Decimal):
-        self.car_type = car_type
-        self.departure_point = departure_point
-        self.destination_point = destination_point
-        self.id = uuid4()
-        self.offer_time = offer_time
-        self.passenger_id = passenger.id
-        self.payment_handler = payment_handler
-        self.price = price
+    car_type: CarType = CarType.ECONOMY
+    departure_point: Location = Location(0, 0)
+    destination_point: Location = Location(0, 0)
+    offer_time: datetime = datetime(year=0, month=0, day=0)
+    passenger: Passenger = Passenger('admin', 'password')
+    payment_handler: PaymentHandler = CashPayHandler(passenger)
+    price: Decimal = Decimal(0.0)
 
-    def __init__(self):
+    def __post_init__(self):
         self.id = uuid4()
-        pass
+        self.passenger_id = self.passenger.id
 
 
 @singleton
