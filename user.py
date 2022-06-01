@@ -21,8 +21,8 @@ class User:
                                  "first symbol is letter")
 
         self.login = login
-        self.location = Location(randint(Map().min_x, Map().max_x),
-                                 randint(Map().min_y, Map().max_y))
+        self.__location = Location(randint(Map().min_x, Map().max_x),
+                                   randint(Map().min_y, Map().max_y))
         self.id = uuid4()
 
         # We don't save passwords!
@@ -40,6 +40,15 @@ class User:
             self.__rating = 10.0
         if self.__rating < 0.0:
             self.__rating = 0.0
+
+    @property
+    def location(self):
+        return self.__location
+
+    @location.setter
+    def location(self, value: Location):
+        if 0 <= value.x <= Map().max_x and 0 <= value.y <= Map().max_y:
+            self.__location = value
 
     def __str__(self):
         return f"{self.login}"
@@ -70,6 +79,6 @@ class UserManager:
 
     def add_user(self, user: User) -> bool:
         for user in self.users:
-            if user.login == user.login and user.login != 'admin':
+            if user.login == user.login:
                 raise ValueError("Login is already used by another user")
         return Manager.add_element(self.users, user)

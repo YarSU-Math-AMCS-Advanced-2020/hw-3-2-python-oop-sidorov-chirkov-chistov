@@ -102,7 +102,7 @@ class OfferBuilder(ABC):
 
     def create_offer(self) -> Offer | None:
         # If price is not None, then object was completely created
-        return self.offer if (self.offer.price is not None) else None
+        return self.offer if (self.offer.price != Decimal(0.0)) else None
 
     def reset(self):
         self.offer = Offer()

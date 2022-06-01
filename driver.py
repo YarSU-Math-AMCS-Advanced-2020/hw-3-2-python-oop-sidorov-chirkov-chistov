@@ -24,14 +24,15 @@ class Driver(User):
     def update(self, offer_list: List[Offer]):
         self.__enable_offers = offer_list
 
-    def handle_offer(self, offer_index: int) -> bool:
+    def handle_offer(self, offer_index: int) -> Trip | None:
         offer = self.__enable_offers[offer_index]
         if OfferManager().find_offer_by_id(offer.id) is not None:
             self.status = Status.ON_ROUTE
             OfferManager().del_offer_by_id(offer.id)
-            TripManager().add_trip(Trip(self, offer))
-            return True
-        return False
+            trip = Trip(self, offer)
+            TripManager().add_trip(trip)
+            return trip
+        return None
 
     def get_ready(self):
         if self.status != Status.ON_ROUTE:
