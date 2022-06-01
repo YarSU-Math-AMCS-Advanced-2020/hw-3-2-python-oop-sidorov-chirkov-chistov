@@ -1,6 +1,6 @@
 import random
 from random import randint
-from typing import List
+from typing import List, Optional
 from uuid import uuid4, UUID
 
 from driver import Driver
@@ -62,16 +62,16 @@ class UserManager:
     def del_user_by_id(self, _id: UUID) -> bool:
         return Manager.del_by_id(self.users, _id)
 
-    def find_user_by_id(self, _id: UUID) -> User | None:
+    def find_user_by_id(self, _id: UUID) -> Optional[User]:
         return Manager.find_by_id(self.users, _id)
 
-    def find_driver_by_id(self, _id: UUID) -> Driver | None:
+    def find_driver_by_id(self, _id: UUID) -> Optional[Driver]:
         driver = Manager.find_by_id(self.users, _id)
         if driver is Driver:
             return driver
         return None
 
-    def find_passenger_by_id(self, _id: UUID) -> Passenger | None:
+    def find_passenger_by_id(self, _id: UUID) -> Optional[Passenger]:
         passenger = Manager.find_by_id(self.users, _id)
         if passenger is Passenger:
             return passenger

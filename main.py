@@ -2,10 +2,9 @@ from decimal import Decimal
 
 from car import Car, Model
 from driver import Driver
-from map import Location, Map
-from offer import OfferDirector, OfferManager, OfferBuilder, Offer
+from map import Location
+from offer import OfferDirector, OfferManager
 from passenger import Passenger
-from trip import TripManager
 
 car = Car(Model.HYUNDAI_SOLARIS, 'E-123')
 driver = Driver('Makar', 'cool_driver_007', car)

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from decimal import Decimal
-from typing import List
+from typing import List, Optional
 from uuid import uuid4, UUID
 
 from user import UserManager
@@ -61,7 +61,7 @@ class TripManager:
     def del_trip_by_id(self, _id: UUID) -> bool:
         return Manager.del_by_id(self.trips, _id)
 
-    def find_trip_by_id(self, _id: UUID) -> Trip | None:
+    def find_trip_by_id(self, _id: UUID) -> Optional[Trip]:
         return Manager.find_by_id(self.trips, _id)
 
     def add_trip(self, trip: Trip) -> bool:

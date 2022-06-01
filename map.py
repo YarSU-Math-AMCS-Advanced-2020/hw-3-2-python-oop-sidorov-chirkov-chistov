@@ -57,7 +57,7 @@ class Map:
                     self.city_map[i][j] = randint(self.min_traffic, self.max_traffic)
 
     # Dijkstra implementation
-    def find_way(self, start: Location, end: Location) -> list[Location]:
+    def find_way(self, start: Location, end: Location) -> List[Location]:
         inf = int(10 ** 10)
         bad_location = Location(-1, -1)
 
@@ -68,7 +68,7 @@ class Map:
         s = {(distance[start.x][start.y], start)}
 
         # Utility func
-        def update_vertex(xx: int, yy: int) -> None:
+        def update_vertex(xx: int, yy: int):
             if self.city_map[xx][yy] + dist < distance[xx][yy]:
                 distance[xx][yy] = self.city_map[xx][yy] + dist
                 s.add((distance[xx][yy], Location(xx, yy)))

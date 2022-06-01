@@ -2,6 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from decimal import Decimal
 from enum import Enum
+from typing import Optional
 
 from passenger import Passenger
 
@@ -40,7 +41,7 @@ def create_handler(passenger: Passenger,
 
 
 class PaymentHandler(ABC):
-    _next_handler: PaymentHandler | None = None
+    _next_handler: Optional[PaymentHandler] = None
 
     @abstractmethod
     def __init__(self, passenger: Passenger):

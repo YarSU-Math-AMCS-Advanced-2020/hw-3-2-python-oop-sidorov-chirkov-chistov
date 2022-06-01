@@ -1,5 +1,5 @@
 import enum
-from typing import List
+from typing import List, Optional
 
 from car import Car
 from user import User
@@ -24,7 +24,7 @@ class Driver(User):
     def update(self, offer_list: List[Offer]):
         self.__enable_offers = offer_list
 
-    def handle_offer(self, offer_index: int) -> Trip | None:
+    def handle_offer(self, offer_index: int) -> Optional[Trip]:
         offer = self.__enable_offers[offer_index]
         if OfferManager().find_offer_by_id(offer.id) is not None:
             self.status = Status.ON_ROUTE

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 from decimal import Decimal
-from typing import List
+from typing import List, Optional, Union
 from uuid import uuid4, UUID
 
 from car import Car, CarType
@@ -53,7 +53,7 @@ class OfferManager:
     def del_offer_by_id(self, _id: UUID) -> bool:
         return Manager.del_by_id(self.offers, _id)
 
-    def find_offer_by_id(self, _id: UUID) -> Offer | None:
+    def find_offer_by_id(self, _id: UUID) -> Optional[Offer]:
         return Manager.find_by_id(self.offers, _id)
 
     def add_offer(self, offer: Offer) -> bool:
@@ -64,7 +64,7 @@ class OfferBuilder(ABC):
     def __init__(self):
         self.offer = Offer()
 
-    def add_car_type(self, car_info: Car | CarType = CarType.ECONOMY):
+    def add_car_type(self, car_info: Union[Car, CarType] = CarType.ECONOMY):
         if isinstance(car_info, Car):
             self.offer.car_type = car_info.car_type
         elif isinstance(car_info, CarType):
@@ -100,7 +100,7 @@ class OfferBuilder(ABC):
     def add_price(self):
         pass
 
-    def create_offer(self) -> Offer | None:
+    def create_offer(self) -> Optional[Offer]:
         # If price is not None, then object was completely created
         return self.offer if (self.offer.price != Decimal(0.0)) else None
 
@@ -152,7 +152,7 @@ class OfferDirector:
                             car: Car,
                             destination: Location,
                             builder: OfferBuilder =
-                            DefaultOfferBuilder()) -> Offer | None:
+                            DefaultOfferBuilder()) -> Optional[Offer]:
         builder.add_car_type(car.car_type)
         builder.add_departure_point()
         builder.add_destination_point(destination)
@@ -166,7 +166,7 @@ class OfferDirector:
     def make_offer_without_car(passenger: Passenger,
                                destination: Location,
                                builder: OfferBuilder =
-                               DefaultOfferBuilder()) -> Offer | None:
+                               DefaultOfferBuilder()) -> Optional[Offer]:
         builder.add_car_type()
         builder.add_departure_point()
         builder.add_destination_point(destination)
@@ -180,7 +180,7 @@ class OfferDirector:
     def make_offer_with_car_with_applepay(passenger: Passenger, car: Car,
                                           destination: Location,
                                           builder: OfferBuilder =
-                                          DefaultOfferBuilder()) -> Offer | None:
+                                          DefaultOfferBuilder()) -> Optional[Offer]:
         builder.add_car_type(car.car_type)
         builder.add_departure_point()
         builder.add_destination_point(destination)
@@ -194,7 +194,7 @@ class OfferDirector:
     def make_offer_without_car_with_applepay(passenger: Passenger,
                                              destination: Location,
                                              builder: OfferBuilder =
-                                             DefaultOfferBuilder()) -> Offer | None:
+                                             DefaultOfferBuilder()) -> Optional[Offer]:
         builder.add_car_type()
         builder.add_departure_point()
         builder.add_destination_point(destination)

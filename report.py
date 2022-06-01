@@ -1,6 +1,6 @@
 from datetime import datetime
 import enum
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from user import UserManager
@@ -43,7 +43,7 @@ class ReportManager:
     def del_report_by_id(self, _id: UUID) -> bool:
         return Manager.del_by_id(self.reports, _id)
 
-    def find_report_by_id(self, _id: UUID) -> Report | None:
+    def find_report_by_id(self, _id: UUID) -> Optional[Report]:
         return Manager.find_by_id(self.reports, _id)
 
     def add_report(self, report: Report) -> bool:

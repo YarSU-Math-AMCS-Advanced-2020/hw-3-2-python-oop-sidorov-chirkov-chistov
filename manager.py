@@ -1,5 +1,7 @@
-from typing import List, Any
+from typing import List, TypeVar, Optional
 from uuid import UUID
+
+T = TypeVar('T')
 
 
 # Decorator for a singleton
@@ -17,7 +19,7 @@ def singleton(cls):
 @singleton
 class Manager:
     @staticmethod
-    def del_by_id(lst: List, _id: UUID):
+    def del_by_id(lst: List[T], _id: UUID) -> bool:
         for index in range(len(lst)):
             if lst[index].id == _id:
                 del lst[index]
@@ -25,14 +27,14 @@ class Manager:
         return False
 
     @staticmethod
-    def find_by_id(lst: List, _id: UUID):
+    def find_by_id(lst: List[T], _id: UUID) -> Optional[T]:
         for element in lst:
             if element.id == _id:
                 return element
         return None
 
     @staticmethod
-    def add_element(lst: List, element: Any):
+    def add_element(lst: List[T], element: T) -> bool:
         if element not in lst:
             lst.append(element)
             return True
