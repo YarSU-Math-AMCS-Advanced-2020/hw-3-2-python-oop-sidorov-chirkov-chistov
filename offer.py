@@ -1,17 +1,17 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from typing import List, Optional, Union
 from uuid import uuid4, UUID
 
 from car import Car, CarType
-from payment import PaymentHandler, PaymentHandlerType, create_handler, CashPayHandler
-from user import UserManager
-from passenger import Passenger
-from dataclasses import dataclass
 from driver import Driver
 from manager import Manager, singleton
 from map import Location, Map
+from passenger import Passenger
+from payment import PaymentHandler, PaymentHandlerType, create_handler, CashPayHandler
+from user import UserManager
 
 
 @dataclass
@@ -43,12 +43,12 @@ class OfferManager:
 
     def notify_observers(self, max_dist: float = 100):
         for driver in self.observers:
-            enable_offers: List[Offer] = []
+            available_offers: List[Offer] = []
             for offer in self.offers:
                 if Map().distance(driver.location, offer.departure_point) < max_dist and \
                         driver.status == driver.status.READY:
-                    enable_offers.append(offer)
-            driver.update(enable_offers)
+                    available_offers.append(offer)
+            driver.update(available_offers)
 
     def del_offer_by_id(self, _id: UUID) -> bool:
         return Manager.del_by_id(self.offers, _id)

@@ -4,12 +4,12 @@ from decimal import Decimal
 from typing import List, Optional
 from uuid import uuid4, UUID
 
-from user import UserManager
 from driver import Driver, Status
 from manager import Manager, singleton
 from map import Map
 from offer import Offer
 from report import Report, ReportManager
+from user import UserManager
 
 
 class Trip:

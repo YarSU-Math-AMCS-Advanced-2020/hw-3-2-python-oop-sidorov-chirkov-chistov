@@ -1,11 +1,11 @@
 from copy import copy
 from dataclasses import dataclass
 from datetime import time, timedelta
+from os import path
+from random import randint
 from typing import List
 
 from manager import singleton
-from os import path
-from random import randint
 
 
 @dataclass

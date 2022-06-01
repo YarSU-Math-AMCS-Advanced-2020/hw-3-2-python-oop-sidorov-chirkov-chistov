@@ -1,11 +1,11 @@
-from datetime import datetime
 import enum
+from datetime import datetime
 from typing import List, Optional
 from uuid import UUID
 
-from user import UserManager
 from manager import singleton, Manager
 from trip import Trip
+from user import UserManager
 
 
 class ReportStatus(enum.Enum):

@@ -2,9 +2,9 @@ import enum
 from typing import List, Optional
 
 from car import Car
-from user import User
 from offer import Offer, OfferManager
 from trip import TripManager, Trip
+from user import User
 
 
 class Status(enum.Enum):
@@ -18,14 +18,14 @@ class Driver(User):
         super().__init__(login, password)
         self.car = car
         self.status: Status = Status.OFFLINE
-        self.__enable_offers: List[Offer] = []
+        self.__available_offers: List[Offer] = []
         OfferManager().add_observer(self)
 
     def update(self, offer_list: List[Offer]):
-        self.__enable_offers = offer_list
+        self.__available_offers = offer_list
 
     def handle_offer(self, offer_index: int) -> Optional[Trip]:
-        offer = self.__enable_offers[offer_index]
+        offer = self.__available_offers[offer_index]
         if OfferManager().find_offer_by_id(offer.id) is not None:
             self.status = Status.ON_ROUTE
             OfferManager().del_offer_by_id(offer.id)
