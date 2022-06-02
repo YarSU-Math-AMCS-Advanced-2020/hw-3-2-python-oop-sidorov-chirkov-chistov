@@ -5,7 +5,7 @@ from os import path
 from random import randint
 from typing import List
 
-from manager import singleton
+import manager
 
 
 @dataclass
@@ -24,7 +24,7 @@ class Location:
         return f"({self.x}, {self.y})"
 
 
-@singleton
+@manager.singleton
 class Map:
     def __init__(self):  # map: 0 - can pass, -1 - can't pass
         self.city_map = []
@@ -36,7 +36,6 @@ class Map:
 
         self.city_map: List[List[int]] = \
             [[int(cell) for cell in line.split()] for line in lst]
-        self.update_traffic()
 
         # Limits of map
         self.min_x = 0
@@ -46,6 +45,8 @@ class Map:
 
         self.min_traffic = 0
         self.max_traffic = 10
+
+        self.update_traffic()
 
     def __getitem__(self, item: int):
         return self.city_map[item]

@@ -1,8 +1,8 @@
-import enum
 from dataclasses import dataclass
+from enum import Enum
 
 
-class Model(enum.Enum):
+class Model(Enum):
     LADA_2121 = 0
     RENAULT_LOGAN = 1
     HYUNDAI_SOLARIS = 2
@@ -11,7 +11,7 @@ class Model(enum.Enum):
     AUDI_A8 = 5
 
 
-class CarType(enum.Enum):
+class CarType(Enum):
     ECONOMY = 0
     COMFORT = 1
     BUSINESS = 2

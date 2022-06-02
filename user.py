@@ -1,12 +1,11 @@
-import random
-from random import randint
+from random import randint, random
 from typing import List, Optional
 from uuid import uuid4, UUID
 
-from driver import Driver
-from manager import Manager, singleton
-from map import Location, Map
-from passenger import Passenger
+import driver
+import manager
+import map
+import passenger
 
 
 class User:
@@ -21,13 +20,13 @@ class User:
                                  "first symbol is letter")
 
         self.login = login
-        self.__location = Location(randint(Map().min_x, Map().max_x),
-                                   randint(Map().min_y, Map().max_y))
+        self.__location = map.Location(randint(map.Map().min_x, map.Map().max_x),
+                                       randint(map.Map().min_y, map.Map().max_y))
         self.id = uuid4()
 
         # We don't save passwords!
         self.__password = hash(password)
-        self.__rating: float = random.random() * 10  # from 0.0 to 10.0
+        self.__rating: float = random() * 10  # from 0.0 to 10.0
 
     @property
     def rating(self):
@@ -46,39 +45,39 @@ class User:
         return self.__location
 
     @location.setter
-    def location(self, value: Location):
-        if 0 <= value.x <= Map().max_x and 0 <= value.y <= Map().max_y:
+    def location(self, value: map.Location):
+        if 0 <= value.x <= map.Map().max_x and 0 <= value.y <= map.Map().max_y:
             self.__location = value
 
     def __str__(self):
         return f"{self.login}"
 
 
-@singleton
+@manager.singleton
 class UserManager:
     def __init__(self):
         self.users: List[User] = []
 
     def del_user_by_id(self, _id: UUID) -> bool:
-        return Manager.del_by_id(self.users, _id)
+        return manager.Manager.del_by_id(self.users, _id)
 
     def find_user_by_id(self, _id: UUID) -> Optional[User]:
-        return Manager.find_by_id(self.users, _id)
+        return manager.Manager.find_by_id(self.users, _id)
 
-    def find_driver_by_id(self, _id: UUID) -> Optional[Driver]:
-        driver = Manager.find_by_id(self.users, _id)
-        if driver is Driver:
-            return driver
+    def find_driver_by_id(self, _id: UUID) -> Optional[driver.Driver]:
+        __driver = manager.Manager.find_by_id(self.users, _id)
+        if __driver is driver.Driver:
+            return __driver
         return None
 
-    def find_passenger_by_id(self, _id: UUID) -> Optional[Passenger]:
-        passenger = Manager.find_by_id(self.users, _id)
-        if passenger is Passenger:
-            return passenger
+    def find_passenger_by_id(self, _id: UUID) -> Optional[passenger.Passenger]:
+        __passenger = manager.Manager.find_by_id(self.users, _id)
+        if __passenger is passenger.Passenger:
+            return __passenger
         return None
 
     def add_user(self, user: User) -> bool:
         for user in self.users:
             if user.login == user.login:
                 raise ValueError("Login is already used by another user")
-        return Manager.add_element(self.users, user)
+        return manager.Manager.add_element(self.users, user)

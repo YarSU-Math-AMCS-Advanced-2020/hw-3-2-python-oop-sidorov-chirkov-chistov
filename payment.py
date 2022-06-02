@@ -5,7 +5,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import Optional
 
-from passenger import Passenger
+import passenger
 
 
 class PaymentHandlerType(Enum):
@@ -17,27 +17,27 @@ class PaymentHandlerType(Enum):
 
 # Create handler with selected type first
 # Cash payment is default
-def create_handler(passenger: Passenger,
+def create_handler(__passenger: passenger.Passenger,
                    payment_handler_type: PaymentHandlerType) -> PaymentHandler:
     if payment_handler_type == CashPayHandler:
-        handler: PaymentHandler = CashPayHandler(passenger)
+        handler: PaymentHandler = CashPayHandler(__passenger)
         return handler
 
-    handler = GooglePayHandler(passenger)
-    handler.set_next(ApplePayHandler(passenger))
-    handler.set_next(BankCardPayHandler(passenger))
+    handler = GooglePayHandler(__passenger)
+    handler.set_next(ApplePayHandler(__passenger))
+    handler.set_next(BankCardPayHandler(__passenger))
 
     if payment_handler_type == ApplePayHandler:
-        handler = ApplePayHandler(passenger)
-        handler.set_next(GooglePayHandler(passenger))
-        handler.set_next(BankCardPayHandler(passenger))
+        handler = ApplePayHandler(__passenger)
+        handler.set_next(GooglePayHandler(__passenger))
+        handler.set_next(BankCardPayHandler(__passenger))
 
     if payment_handler_type == BankCardPayHandler:
-        handler = BankCardPayHandler(passenger)
-        handler.set_next(GooglePayHandler(passenger))
-        handler.set_next(ApplePayHandler(passenger))
+        handler = BankCardPayHandler(__passenger)
+        handler.set_next(GooglePayHandler(__passenger))
+        handler.set_next(ApplePayHandler(__passenger))
 
-    handler.set_next(CashPayHandler(passenger))
+    handler.set_next(CashPayHandler(__passenger))
     return handler
 
 
@@ -45,8 +45,8 @@ class PaymentHandler(ABC):
     _next_handler: Optional[PaymentHandler] = None
 
     @abstractmethod
-    def __init__(self, passenger: Passenger):
-        self.passenger = passenger
+    def __init__(self, __passenger: passenger.Passenger):
+        self.passenger = __passenger
 
     def set_next(self, handler: PaymentHandler) -> PaymentHandler:
         self._next_handler = handler
@@ -61,8 +61,8 @@ class PaymentHandler(ABC):
 
 
 class GooglePayHandler(PaymentHandler):
-    def __init__(self, passenger: Passenger):
-        super().__init__(passenger)
+    def __init__(self, __passenger: passenger.Passenger):
+        super().__init__(__passenger)
 
     def handle(self, price: Decimal) -> str:
         if self.passenger.google_pay_balance >= price:
@@ -73,8 +73,8 @@ class GooglePayHandler(PaymentHandler):
 
 
 class ApplePayHandler(PaymentHandler):
-    def __init__(self, passenger: Passenger):
-        super().__init__(passenger)
+    def __init__(self, __passenger: passenger.Passenger):
+        super().__init__(__passenger)
 
     def handle(self, price: Decimal) -> str:
         if self.passenger.apple_pay_balance >= price:
@@ -85,8 +85,8 @@ class ApplePayHandler(PaymentHandler):
 
 
 class BankCardPayHandler(PaymentHandler):
-    def __init__(self, passenger: Passenger):
-        super().__init__(passenger)
+    def __init__(self, __passenger: passenger.Passenger):
+        super().__init__(__passenger)
 
     def handle(self, price: Decimal) -> str:
         if self.passenger.google_pay_balance >= price:
@@ -97,8 +97,8 @@ class BankCardPayHandler(PaymentHandler):
 
 
 class CashPayHandler(PaymentHandler):
-    def __init__(self, passenger: Passenger):
-        super().__init__(passenger)
+    def __init__(self, __passenger: passenger.Passenger):
+        super().__init__(__passenger)
 
     def handle(self, price: Decimal) -> str:
         return 'Passenger have to pay by cash'
