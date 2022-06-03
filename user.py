@@ -67,13 +67,13 @@ class UserManager:
 
     def find_driver_by_id(self, _id: UUID) -> Optional[Driver]:
         driver = Manager.find_by_id(self.users, _id)
-        if driver is Driver:
+        if isinstance(driver, Driver):
             return driver
         return None
 
     def find_passenger_by_id(self, _id: UUID) -> Optional[Passenger]:
         passenger = Manager.find_by_id(self.users, _id)
-        if passenger is Passenger:
+        if isinstance(passenger, Passenger):
             return passenger
         return None
 
