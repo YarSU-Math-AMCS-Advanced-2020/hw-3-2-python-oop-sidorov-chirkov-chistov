@@ -16,13 +16,13 @@ from user import UserManager
 
 @dataclass
 class Offer:
-    car_type: CarType = CarType.ECONOMY
-    departure_point: Location = Location(0, 0)
-    destination_point: Location = Location(0, 0)
-    offer_time: datetime = datetime(year=0, month=0, day=0)
-    passenger: Passenger = Passenger('admin', 'password')
-    payment_handler: PaymentHandler = CashPayHandler(passenger)
-    price: Decimal = Decimal(0.0)
+    car_type: CarType
+    departure_point: Location
+    destination_point: Location
+    offer_time: datetime
+    passenger: Passenger
+    payment_handler: PaymentHandler
+    price: Decimal
 
     def __post_init__(self):
         self.id = uuid4()
